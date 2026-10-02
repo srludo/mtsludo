@@ -3,77 +3,259 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SR LUDO | My Wallet</title>
+  <title>SKILL LUDO | Passbook & Wallet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #040913; --card: #0d1b33; --card-2: #102340; --text: #e8efff;
-      --muted: #9fb0d1; --line: rgba(255,255,255,.08); --gold-1: #a86b00; --gold-2: #ffd05a;
+      --bg: #07090e;
+      --card: #101728;
+      --card-2: #162035;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.35);
+      --gold-1: #92400e;
+      --gold-2: #f59e0b;
+      --border-gold: rgba(245, 158, 11, 0.22);
+      --danger: #ef4444;
+      --ok: #10b981;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Inter', sans-serif; color: var(--text); background: radial-gradient(1200px 500px at 50% -200px, #154b99 0%, var(--bg) 65%); }
-    .app { max-width: 540px; margin: 0 auto; min-height: 100vh; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); padding-bottom: 24px; }
-    .header { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px); background: rgba(4,9,19,.88); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 12px; }
-    .icon-btn { border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--text); border-radius: 10px; width: 38px; height: 38px; display: grid; place-items: center; text-decoration: none; cursor: pointer; }
-    .title { font-weight: 800; letter-spacing: .8px; }
-    .content { padding: 14px; }
-    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .wallet-card { border: 1px solid var(--line); border-radius: 14px; padding: 13px; min-height: 110px; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
-    .cash { background: linear-gradient(130deg, #0f49b3, #2a89ff); }
-    .win { background: linear-gradient(130deg, var(--gold-1), var(--gold-2)); color: #21180f; }
-    .wallet-card p { margin: 0; font-size: 12px; opacity: .9; }
-    .wallet-card h2 { margin: 8px 0 0; font-size: 28px; }
-    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-    .btn { border: 0; border-radius: 12px; padding: 12px; font-weight: 700; color: #fff; cursor: pointer; }
-    .btn-add { background: linear-gradient(110deg, #0e9245, #31cb75); }
-    .btn-withdraw { background: linear-gradient(110deg, #d24a13, #ff874a); }
-    .tabs { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .tab { border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.03); color: var(--text); padding: 10px; cursor: pointer; font-weight: 600; text-align: center; }
-    .tab.active { background: rgba(47,123,255,.25); border-color: rgba(47,123,255,.6); }
-    .list { margin-top: 10px; }
-    .panel { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: linear-gradient(160deg, var(--card), var(--card-2)); box-shadow: 0 14px 30px rgba(0,0,0,.35); }
-    .item { border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.02); padding: 10px; margin-bottom: 8px; font-size: 12px; }
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text);
+      background: radial-gradient(1000px 500px at 50% -100px, #201301 0%, var(--bg) 70%);
+      min-height: 100vh;
+    }
+    .app {
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      background: #080c14;
+      padding-bottom: 30px;
+    }
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(12, 18, 32, 0.94);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
+    .icon-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .title { font-weight: 800; letter-spacing: 0.6px; font-size: 15px; color: #fff; }
+    .content { padding: 16px; }
+
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .wallet-card {
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 16px 14px;
+      min-height: 115px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cash { background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff; }
+    .win { background: linear-gradient(135deg, var(--gold-1), var(--gold-2)); color: #000; font-weight: 800; }
+    .wallet-card p { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; opacity: 0.85; }
+    .wallet-card h2 { margin: 8px 0 0; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-add { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; box-shadow: 0 4px 18px rgba(34, 197, 94, 0.3); }
+    .btn-withdraw { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; box-shadow: 0 4px 18px var(--accent-glow); }
+
+    .panel {
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 16px;
+      background: #0f1626;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+      margin-top: 16px;
+    }
+    .panel h3 { margin: 0 0 12px; font-size: 15px; font-weight: 800; color: #fff; }
+
+    .tabs { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tab {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      color: var(--muted);
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .tab.active { background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent); }
+
+    .list { margin-top: 14px; }
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #0f1626;
+      padding: 14px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
     .muted { color: var(--muted); }
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 35; display: none; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 35; display: none; }
     .overlay.show { display: block; }
-    .modal { position: fixed; z-index: 40; left: 50%; top: 50%; transform: translate(-50%,-50%); width: min(92%, 460px); border: 1px solid var(--line); border-radius: 14px; background: #09182f; padding: 14px; display: none; }
+    .modal {
+      position: fixed;
+      z-index: 40;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      width: min(92%, 440px);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      background: #0c1220;
+      padding: 20px;
+      display: none;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.8);
+    }
     .modal.show { display: block; }
-    .input { width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--text); border-radius: 10px; padding: 11px; margin-top: 8px; outline: none; }
-    .sidebar { position: fixed; inset: 0 auto 0 0; width: 78%; max-width: 320px; background: #09172d; border-right: 1px solid var(--line); z-index: 50; transform: translateX(-100%); transition: transform .24s ease; padding: 16px; }
+    .modal h3 { margin: 0 0 14px; color: #fff; font-size: 17px; font-weight: 800; }
+    .input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #080c14;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 13px 15px;
+      margin-top: 10px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+    .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 80%;
+      max-width: 320px;
+      background: #0b101c;
+      border-right: 1px solid var(--border-gold);
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform .28s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 24px 18px;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+    }
     .sidebar.open { transform: translateX(0); }
-    .menu-link { display: block; color: var(--text); text-decoration: none; border: 1px solid var(--line); padding: 10px; border-radius: 10px; margin-bottom: 8px; background: rgba(255,255,255,.03); }
-    .method-btn.active { border-color: #fff; background: rgba(47,123,255,.35); }
+    .menu-link {
+      display: flex;
+      align-items: center;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 13px 16px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.02);
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .menu-link:hover { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); color: var(--accent); }
+    .method-btn {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #080c14;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .method-btn.active { border-color: var(--accent); background: rgba(245, 158, 11, 0.15); color: #fff; }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="header">
-      <a class="icon-btn" href="index.html">←</a>
-      <div class="title">MY WALLET</div>
+      <a class="icon-btn" href="app.html">←</a>
+      <div class="title">PASSBOOK & LEDGER</div>
       <button class="icon-btn" id="menuBtn">☰</button>
     </header>
 
     <main class="content">
       <section class="cards">
-        <article class="wallet-card cash"><p>Deposit Cash</p><h2 id="cashBal">₹0</h2></article>
-        <article class="wallet-card win"><p>Winnings</p><h2 id="winBal">₹0</h2></article>
+        <article class="wallet-card cash">
+          <p>Deposit Vault</p>
+          <h2 id="cashBal">₹0</h2>
+        </article>
+        <article class="wallet-card win">
+          <p>Realized Winnings</p>
+          <h2 id="winBal">₹0</h2>
+        </article>
       </section>
 
       <section class="actions">
-        <button id="addCashBtn" class="btn btn-add">ADD CASH</button>
+        <button id="addCashBtn" class="btn btn-add">DEPOSIT CASH</button>
         <button id="withdrawBtn" class="btn btn-withdraw">WITHDRAW</button>
       </section>
 
-      <section class="panel" style="margin-top:12px;">
-        <h3>Refer & Earn</h3>
+      <section class="panel">
+        <h3>Referral Dividends & Yields</h3>
         <div class="cards" style="grid-template-columns:1fr 1fr 1fr; gap:8px;">
-          <article class="wallet-card" style="min-height:88px;background:rgba(47,123,255,.15);"><p>Total Refers</p><h2 id="totalRefers" style="font-size:20px;">0</h2></article>
-          <article class="wallet-card" style="min-height:88px;background:rgba(255,208,90,.15);"><p>Total Earned</p><h2 id="totalEarned" style="font-size:20px;">₹0</h2></article>
-          <article class="wallet-card" style="min-height:88px;background:rgba(56,209,127,.15);"><p>Referral Wallet</p><h2 id="referralWallet" style="font-size:20px;">₹0</h2></article>
+          <article class="wallet-card" style="min-height:86px; background:#080c14; border-color:var(--line); padding:12px 10px;">
+            <p style="font-size:10px;">Invites</p>
+            <h2 id="totalRefers" style="font-size:18px; margin-top:4px;">0</h2>
+          </article>
+          <article class="wallet-card" style="min-height:86px; background:#080c14; border-color:var(--line); padding:12px 10px;">
+            <p style="font-size:10px;">Total Earned</p>
+            <h2 id="totalEarned" style="font-size:18px; margin-top:4px; color:var(--ok);">₹0</h2>
+          </article>
+          <article class="wallet-card" style="min-height:86px; background:#080c14; border-color:var(--line); padding:12px 10px;">
+            <p style="font-size:10px;">Claimable</p>
+            <h2 id="referralWallet" style="font-size:18px; margin-top:4px; color:var(--accent);">₹0</h2>
+          </article>
         </div>
-        <button id="withdrawReferralBtn" class="btn btn-add" style="margin-top:10px; width:100%;">Withdraw Commission to Cash</button>
+        <button id="withdrawReferralBtn" class="btn btn-add" style="margin-top:12px; width:100%; font-size:13px;">Transfer Commission to Deposit Vault</button>
       </section>
 
       <section class="tabs">
@@ -85,38 +267,44 @@
   </div>
 
   <aside id="sidebar" class="sidebar">
-    <h4>SR LUDO Menu</h4>
-    <a href="index.html" class="menu-link">Home</a>
-    <a href="wallet.html" class="menu-link">Wallet</a>
-    <a href="profile.html" class="menu-link">Profile</a>
-    <a href="#" class="menu-link" id="logoutBtn">Logout</a>
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--line);">
+      <img src="logo.png" style="height:34px;">
+      <h3 style="color:#fff; margin:0; font-size:16px;">SKILL LUDO</h3>
+    </div>
+    <a href="app.html" class="menu-link">Arena Dashboard</a>
+    <a href="battles.html" class="menu-link">Battle Tables</a>
+    <a href="wallet.html" class="menu-link">Passbook & Ledger</a>
+    <a href="profile.html" class="menu-link">KYC & Account Verification</a>
+    <a href="#" class="menu-link" id="logoutBtn" style="color:var(--danger); border-color:rgba(239,68,68,0.2);">Sign Out</a>
   </aside>
 
   <div class="overlay" id="overlay"></div>
 
+  <!-- DEPOSIT MODAL -->
   <section class="modal" id="depositModal">
-    <h3>Add Cash</h3>
-    <img src="qr.png" style="width:180px; display:block; margin:auto; border-radius:10px;" />
-    <input class="input" id="depositAmount" type="number" placeholder="Enter amount" />
-    <input class="input" id="utrInput" placeholder="Enter UTR/Transaction ID" />
+    <h3>Deposit Play Credits</h3>
+    <img src="qr.png" style="width:170px; display:block; margin: 0 auto 12px; border-radius:12px; border: 1px solid var(--border-gold);" />
+    <input class="input" id="depositAmount" type="number" placeholder="Enter Deposit Amount (₹)" />
+    <input class="input" id="utrInput" placeholder="12-digit UTR / Transaction ID" />
     <input class="input" type="file" id="depositSS" accept="image/*" />
-    <div style="display:flex; gap:10px; margin-top:10px;">
-      <button id="submitDepositBtn" class="btn btn-add" style="flex:1;">Submit</button>
-      <button class="btn" style="background:#444;" data-close-modal="depositModal">Close</button>
+    <div style="display:flex; gap:10px; margin-top:14px;">
+      <button id="submitDepositBtn" class="btn btn-add" style="flex:1;">Submit Payment</button>
+      <button class="btn" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid var(--line);" data-close-modal="depositModal">Dismiss</button>
     </div>
   </section>
 
+  <!-- WITHDRAW MODAL -->
   <section class="modal" id="withdrawModal">
-    <h3>Withdraw Winnings</h3>
+    <h3>Redeem Winnings</h3>
     <div style="display:flex; gap:8px;">
-      <button id="methodUpiBtn" class="btn method-btn active" style="flex:1; background:#222; border:1px solid #444;">UPI</button>
-      <button id="methodBankBtn" class="btn method-btn" style="flex:1; background:#222; border:1px solid #444;">Bank</button>
+      <button id="methodUpiBtn" class="method-btn active" style="flex:1;">Direct UPI</button>
+      <button id="methodBankBtn" class="method-btn" style="flex:1;">Bank NEFT/IMPS</button>
     </div>
-    <div id="withdrawMethodInfo" style="margin-top:10px; font-size:12px; color:var(--muted);"></div>
-    <input class="input" id="withdrawAmount" type="number" placeholder="Min ₹100" />
-    <div style="display:flex; gap:10px; margin-top:10px;">
-      <button id="submitWithdrawBtn" class="btn btn-withdraw" style="flex:1;">Submit Request</button>
-      <button class="btn" style="background:#444;" data-close-modal="withdrawModal">Close</button>
+    <div id="withdrawMethodInfo" style="margin-top:12px; font-size:12px; color:var(--muted); background:#080c14; padding:10px; border-radius:10px; border:1px solid var(--line);"></div>
+    <input class="input" id="withdrawAmount" type="number" placeholder="Enter Amount (Min ₹100)" />
+    <div style="display:flex; gap:10px; margin-top:14px;">
+      <button id="submitWithdrawBtn" class="btn btn-withdraw" style="flex:1;">Confirm Payout</button>
+      <button class="btn" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid var(--line);" data-close-modal="withdrawModal">Dismiss</button>
     </div>
   </section>
 
@@ -124,25 +312,26 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   import { getDatabase, ref, get, set, push, onValue, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
   import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-const firebaseConfig = {
-      apiKey: 'AIzaSyAgzbX3dy5PSnlwHvXGKyfGJyk0YtVd8xE',
-      authDomain: 'ludo-skill-ml.firebaseapp.com',
-      databaseURL: 'https://ludo-skill-ml-default-rtdb.firebaseio.com',
-      projectId: 'ludo-skill-ml',
-      storageBucket: 'ludo-skill-ml.firebasestorage.app',
-      messagingSenderId: '687435118193',
-      appId: '1:687435118193:web:729dfaaa3fc36393508dd0'
-    };
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyAgzbX3dy5PSnlwHvXGKyfGJyk0YtVd8xE',
+    authDomain: 'ludo-skill-ml.firebaseapp.com',
+    databaseURL: 'https://ludo-skill-ml-default-rtdb.firebaseio.com',
+    projectId: 'ludo-skill-ml',
+    storageBucket: 'ludo-skill-ml.firebasestorage.app',
+    messagingSenderId: '687435118193',
+    appId: '1:687435118193:web:729dfaaa3fc36393508dd0'
+  };
+
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   const auth = getAuth(app);
   const IMGBB_API_KEY = 'ca44783bda6779b5e3913432bd243b30';
 
-  // Global variables
   let userData = {};
   let activeTab = 'deposit';
   let currentMethod = 'UPI';
-  let phone = ""; // Ye niche auto-fill hoga
+  let phone = "";
 
   const cashBal = document.getElementById('cashBal');
   const winBal = document.getElementById('winBal');
@@ -156,22 +345,24 @@ const firebaseConfig = {
   const showModal = (id) => { document.getElementById(id).classList.add('show'); document.getElementById('overlay').classList.add('show'); };
   const closeModal = (modal) => { modal.classList.remove('show'); document.getElementById('overlay').classList.remove('show'); };
 
-  // --- AUTH CHECK: Sab kuch iske andar hona chahiye ---
+  // --- AUTH CHECK WITH FALLBACK ---
+  const cachedPhone = localStorage.getItem('sr_ludo_phone');
+
   onAuthStateChanged(auth, (user) => {
-    if (user) {
+    if (user && user.email) {
       const userEmailPrefix = user.email.split('@')[0];
       phone = userEmailPrefix.length === 10 ? "+91" + userEmailPrefix : userEmailPrefix;
       localStorage.setItem('sr_ludo_phone', phone);
-      
-      console.log("Authenticated as:", phone);
-      startAppLogic(); // Pura logic yahan se shuru hoga
+      startAppLogic();
+    } else if (cachedPhone) {
+      phone = cachedPhone;
+      startAppLogic();
     } else {
       window.location.href = 'index.html';
     }
   });
 
   function startAppLogic() {
-    // 1. User Balance Load Karein
     onValue(ref(db, `users/${phone}`), (snap) => {
       userData = snap.val() || {};
       cashBal.textContent = fmt(userData.balance);
@@ -181,27 +372,24 @@ const firebaseConfig = {
       renderWithdrawMethodInfo();
     });
 
-    // 2. Referrals Load Karein
     onValue(ref(db, `referrals/${phone}`), (snap) => {
       totalRefers.textContent = Object.keys(snap.val() || {}).length;
     });
 
-    // 3. History Load Karein
     loadHistory();
   }
 
-  // --- BAKI FUNCTIONS (History, Withdraw, Deposit) ---
   const renderHistory = (records) => {
-    if (!records.length) { historyList.innerHTML = '<div class="item muted">No records found.</div>'; return; }
+    if (!records.length) { historyList.innerHTML = '<div class="item muted" style="text-align:center;">No records found.</div>'; return; }
     historyList.innerHTML = records.map(r => {
       const status = (r.status || 'pending').toLowerCase();
-      const color = status === 'approved' ? '#38d17f' : (status === 'rejected' ? '#ff3d4d' : '#ffb34a');
-      return `<div class="item" style="border-left: 4px solid ${color}; background:rgba(255,255,255,0.02); padding:10px; margin-bottom:8px; border-radius:8px;">
-                <div style="display:flex; justify-content:space-between;">
-                  <strong>${fmt(r.amount)}</strong>
-                  <span style="color:${color}; font-weight:800; text-transform:uppercase; font-size:10px;">${status}</span>
+      const color = status === 'approved' ? '#10b981' : (status === 'rejected' ? '#ef4444' : '#f59e0b');
+      return `<div class="item" style="border-left: 4px solid ${color};">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <strong style="font-size:15px; color:#fff;">${fmt(r.amount)}</strong>
+                  <span style="color:${color}; font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:0.5px;">${status}</span>
                 </div>
-                <div class="muted" style="font-size:11px; margin-top:5px;">${new Date(r.time).toLocaleString('en-IN')}</div>
+                <div class="muted" style="font-size:11px; margin-top:6px;">${new Date(r.time).toLocaleString('en-IN')}</div>
               </div>`;
     }).join('');
   };
@@ -216,58 +404,54 @@ const firebaseConfig = {
 
   const renderWithdrawMethodInfo = () => {
     if (currentMethod === 'UPI') {
-      withdrawMethodInfo.innerHTML = userData.upi_id ? `UPI: ${userData.upi_id}` : '<span style="color:red">Profile mein UPI update karein!</span>';
+      withdrawMethodInfo.innerHTML = userData.upi_id ? `<strong>Saved UPI:</strong> ${userData.upi_id}` : '<span style="color:#ef4444; font-weight:700;">Profile section mein UPI details add karein!</span>';
     } else {
-      withdrawMethodInfo.innerHTML = userData.bank_acc ? `A/C: ${userData.bank_acc}<br>IFSC: ${userData.bank_ifsc}` : '<span style="color:red">Profile mein Bank details dalein!</span>';
+      withdrawMethodInfo.innerHTML = userData.bank_acc ? `<strong>A/C:</strong> ${userData.bank_acc}<br><strong>IFSC:</strong> ${userData.bank_ifsc}` : '<span style="color:#ef4444; font-weight:700;">Profile section mein Bank details save karein!</span>';
     }
   };
 
-  // Buttons Click Handlers
-// Referral Commission ko Cash Wallet mein bhejne ka logic
-document.getElementById('withdrawReferralBtn').onclick = async () => {
-    // Check karein ki referral wallet mein paisa hai bhi ya nahi
+  document.getElementById('withdrawReferralBtn').onclick = async () => {
     const amountToMove = Number(userData.referral_balance || 0);
 
     if (amountToMove <= 0) {
-        return alert('Referral wallet mein balance nahi hai!');
+      return alert('Referral wallet mein balance nahi hai!');
     }
 
-    if (!confirm(`Kya aap ₹${amountToMove} apne cash wallet mein transfer karna chahte hain?`)) {
-        return;
+    if (!confirm(`Kya aap ₹${amountToMove} apne deposit cash wallet mein transfer karna chahte hain?`)) {
+      return;
     }
 
     try {
-        const userRef = ref(db, `users/${phone}`);
-        
-        // Transaction chalao taki referral se minus ho aur balance mein plus ho
-        const tx = await runTransaction(userRef, (user) => {
-            if (user) {
-                const comm = Number(user.referral_balance || 0);
-                if (comm > 0) {
-                    // Referral se balance mein paisa shift karo
-                    user.balance = (user.balance || 0) + comm;
-                    user.referral_balance = 0; // Referral wallet khali kar do
-                }
-            }
-            return user;
-        });
-
-        if (tx.committed) {
-            alert('Success! Commission aapke Cash Wallet mein bhej diya gaya hai.');
-        } else {
-            alert('Transfer fail ho gaya. Kripya dobara koshish karein.');
+      const userRef = ref(db, `users/${phone}`);
+      const tx = await runTransaction(userRef, (user) => {
+        if (user) {
+          const comm = Number(user.referral_balance || 0);
+          if (comm > 0) {
+            user.balance = (user.balance || 0) + comm;
+            user.referral_balance = 0;
+          }
         }
+        return user;
+      });
+
+      if (tx.committed) {
+        alert('Success! Commission aapke Cash Wallet mein transfer ho gaya hai.');
+      } else {
+        alert('Transfer fail ho gaya. Kripya dobara koshish karein.');
+      }
     } catch (error) {
-        console.error("Transfer Error:", error);
-        alert('Error: ' + error.message);
+      console.error("Transfer Error:", error);
+      alert('Error: ' + error.message);
     }
-};
+  };
+
   document.getElementById('addCashBtn').onclick = () => showModal('depositModal');
   document.getElementById('withdrawBtn').onclick = () => { renderWithdrawMethodInfo(); showModal('withdrawModal'); };
+  
   document.getElementById('submitWithdrawBtn').onclick = async () => {
     const amount = Number(document.getElementById('withdrawAmount').value);
-    if (userData.kyc_status !== 'verified') return alert('Pehle KYC verify karein!');
-    if (!amount || amount < 100) return alert('Min ₹100');
+    if (userData.kyc_status !== 'verified') return alert('Pehle Profile se KYC verify karwayein!');
+    if (!amount || amount < 100) return alert('Min withdrawal ₹100 hai.');
     
     try {
       const userRef = ref(db, `users/${phone}`);
@@ -281,86 +465,87 @@ document.getElementById('withdrawReferralBtn').onclick = async () => {
       
       const reqRef = push(ref(db, 'withdraw_requests'));
       await set(reqRef, { id: reqRef.key, phone, amount, status: 'pending', time: Date.now(), method: currentMethod });
-      alert('Request Sent!'); closeModal(document.getElementById('withdrawModal')); loadHistory();
+      alert('Withdrawal Request Sent!'); 
+      closeModal(document.getElementById('withdrawModal')); 
+      loadHistory();
     } catch(e) { alert(e.message); }
   };
 
- document.getElementById('submitDepositBtn').onclick = async () => {
+  document.getElementById('submitDepositBtn').onclick = async () => {
     const amount = Number(document.getElementById('depositAmount').value);
     const utr = document.getElementById('utrInput').value.trim();
     const file = document.getElementById('depositSS').files[0];
     const submitBtn = document.getElementById('submitDepositBtn');
 
-    // 1. Basic Check: Kya user ne sab kuch bhara hai?
     if (!amount || !utr || !file) return alert('Bhai, Amount, UTR aur Screenshot teeno zaruri hain!');
 
-    // Button ko disable karo taaki user baar-baar click na kare
     submitBtn.disabled = true;
     submitBtn.textContent = 'Checking UTR...';
 
     try {
-        // --- 2. ASLI KAAM: UTR CHECK ---
-        // Hum Firebase mein ek list check kar rahe hain jiska naam 'used_utrs' hai
-        const utrRef = ref(db, `used_utrs/${utr}`);
-        const utrSnap = await get(utrRef);
+      const utrRef = ref(db, `used_utrs/${utr}`);
+      const utrSnap = await get(utrRef);
 
-        if (utrSnap.exists()) {
-            // AGAR PEHLE SE HAI TOH YEH ALERT DIKHEGA
-            alert('❌ Already Submitted! Yeh UTR pehle hi kisi ne submit kar diya hai.');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit';
-            return; // Yahin rok do, aage mat badho
-        }
-
-        // --- 3. AGAR NAYA HAI TOH UPLOAD SHURU ---
-        submitBtn.textContent = 'Uploading...';
-        const fd = new FormData(); 
-        fd.append('image', file);
-        
-        const resp = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
-        const json = await resp.json();
-        
-        if(!json.success) throw new Error("Image upload fail ho gaya!");
-
-        // 4. Admin ke liye request bhej rahe hain
-        const reqRef = push(ref(db, 'deposit_requests'));
-        await set(reqRef, { 
-            id: reqRef.key, 
-            phone, 
-            amount, 
-            utr, 
-            screenshot: json.data.url, 
-            status: 'pending', 
-            time: Date.now() 
-        });
-
-        // 5. AB US UTR KO LOCK KAR DO (List mein daal do)
-        // Isse agli baar koi yahi UTR dalega toh woh 'exists' wala alert aayega
-        await set(utrRef, {
-            phone: phone,
-            time: Date.now()
-        });
-
-        alert('✅ Submitted! Admin thodi der mein approve kar dega.');
-        closeModal(document.getElementById('depositModal')); 
-        loadHistory();
-        
-        // Khali kar do boxes ko
-        document.getElementById('depositAmount').value = "";
-        document.getElementById('utrInput').value = "";
-        document.getElementById('depositSS').value = "";
-
-    } catch(e) { 
-        alert('Galti: ' + e.message); 
-    } finally {
+      if (utrSnap.exists()) {
+        alert('❌ Already Submitted! Yeh UTR pehle hi kisi ne submit kar diya hai.');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit';
-    }
-};
+        return;
+      }
 
-  // UI Navigation
-  document.getElementById('methodUpiBtn').onclick = () => { currentMethod = 'UPI'; renderWithdrawMethodInfo(); };
-  document.getElementById('methodBankBtn').onclick = () => { currentMethod = 'Bank'; renderWithdrawMethodInfo(); };
+      submitBtn.textContent = 'Uploading...';
+      const fd = new FormData(); 
+      fd.append('image', file);
+      
+      const resp = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
+      const json = await resp.json();
+      
+      if(!json.success) throw new Error("Image upload fail ho gaya!");
+
+      const reqRef = push(ref(db, 'deposit_requests'));
+      await set(reqRef, { 
+        id: reqRef.key, 
+        phone, 
+        amount, 
+        utr, 
+        screenshot: json.data.url, 
+        status: 'pending', 
+        time: Date.now() 
+      });
+
+      await set(utrRef, {
+        phone: phone,
+        time: Date.now()
+      });
+
+      alert('✅ Submitted! Admin thodi der mein approve kar dega.');
+      closeModal(document.getElementById('depositModal')); 
+      loadHistory();
+      
+      document.getElementById('depositAmount').value = "";
+      document.getElementById('utrInput').value = "";
+      document.getElementById('depositSS').value = "";
+
+    } catch(e) { 
+      alert('Galti: ' + e.message); 
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+    }
+  };
+
+  document.getElementById('methodUpiBtn').onclick = () => {
+    currentMethod = 'UPI';
+    document.getElementById('methodUpiBtn').classList.add('active');
+    document.getElementById('methodBankBtn').classList.remove('active');
+    renderWithdrawMethodInfo();
+  };
+  document.getElementById('methodBankBtn').onclick = () => {
+    currentMethod = 'Bank';
+    document.getElementById('methodBankBtn').classList.add('active');
+    document.getElementById('methodUpiBtn').classList.remove('active');
+    renderWithdrawMethodInfo();
+  };
   document.querySelectorAll('.tab').forEach(t => t.onclick = () => { 
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); 
     t.classList.add('active'); activeTab = t.dataset.tab; loadHistory(); 
@@ -372,7 +557,3 @@ document.getElementById('withdrawReferralBtn').onclick = async () => {
 </script>
 </body>
 </html>
-
-
-
-
