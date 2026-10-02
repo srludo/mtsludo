@@ -3,103 +3,247 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SR LUDO | Refer & Earn</title>
+  <title>SKILL LUDO | Affiliate & Partner Network</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #040913; --card: #0d1b33; --card-2: #102340; --text: #e8efff;
-      --muted: #9fb0d1; --line: rgba(255, 255, 255, 0.08); --accent: #2f7bff;
-      --gold-1: #a86b00; --gold-2: #ffd05a; --ok: #38d17f;
+      --bg: #07090e;
+      --surface: #0c1220;
+      --card: #101728;
+      --card-2: #162035;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.35);
+      --gold-1: #92400e;
+      --gold-2: #f59e0b;
+      --ok: #10b981;
+      --border-gold: rgba(245, 158, 11, 0.22);
+      --danger: #ef4444;
     }
     * { box-sizing: border-box; }
     body {
-      margin: 0; font-family: 'Inter', sans-serif;
-      background: radial-gradient(1200px 500px at 50% -200px, #154b99 0%, var(--bg) 65%);
-      color: var(--text); min-height: 100vh;
-      display: none; /* Auth check hone tak hide rakhenge */
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(1000px 500px at 50% -100px, #201301 0%, var(--bg) 70%);
+      color: var(--text);
+      min-height: 100vh;
+      display: none;
     }
-    .app { max-width: 540px; margin: 0 auto; padding-bottom: 40px; }
-    .header { padding: 20px; display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.2); }
-    .back-btn { text-decoration: none; color: white; font-size: 20px; border: 1px solid var(--line); padding: 5px 12px; border-radius: 10px; }
+    .app {
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      background: #080c14;
+      padding-bottom: 50px;
+    }
+    .header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(12, 18, 32, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+    .back-btn {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      padding: 7px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .kyc-notice {
+      margin: 16px;
+      padding: 14px 16px;
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px solid var(--border-gold);
+      border-left: 4px solid var(--accent);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .kyc-notice span {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fde68a;
+      line-height: 1.4;
+    }
     .hero-card {
-      margin: 20px; padding: 30px 20px; text-align: center;
-      background: linear-gradient(160deg, var(--card), var(--card-2));
-      border: 1px solid var(--line); border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      margin: 0 16px 18px;
+      padding: 30px 20px;
+      text-align: center;
+      background: #0f1626;
+      border: 1px solid var(--border-gold);
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
-    .hero-card h2 { margin: 10px 0; color: var(--gold-2); font-size: 28px; }
-    .hero-card p { color: var(--muted); font-size: 14px; line-height: 1.5; }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+    .hero-card h2 {
+      margin: 12px 0 6px;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .hero-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 16px;
+    }
     .stat-box {
-      background: rgba(255,255,255,0.03); border: 1px solid var(--line);
-      padding: 15px; border-radius: 16px; text-align: center;
+      background: #0f1626;
+      border: 1px solid var(--line);
+      padding: 18px 14px;
+      border-radius: 18px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
-    .stat-box strong { display: block; font-size: 20px; color: var(--ok); margin-top: 5px; }
-    .share-section { margin: 25px 20px; text-align: center; }
+    .stat-box strong {
+      display: block;
+      font-size: 22px;
+      color: var(--ok);
+      margin-top: 6px;
+      font-weight: 800;
+    }
+    .share-section {
+      margin: 20px 16px;
+      text-align: center;
+    }
     .refer-link-box {
-      background: #08162c; border: 1px dashed var(--accent);
-      padding: 15px; border-radius: 12px; margin-bottom: 15px;
-      font-weight: 600; font-size: 14px; word-break: break-all;
-      color: var(--gold-2); min-height: 50px;
+      background: #080c14;
+      border: 1px dashed var(--accent);
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-weight: 700;
+      font-size: 13px;
+      word-break: break-all;
+      color: var(--gold-2);
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .btn {
-      width: 100%; padding: 16px; border-radius: 14px; border: 0;
-      font-weight: 800; font-size: 16px; cursor: pointer; margin-bottom: 12px;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      border: 0;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s ease;
     }
-    .btn-whatsapp { background: #25D366; color: white; }
-    .btn-copy { background: var(--accent); color: white; }
-    .rules { margin: 20px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 16px; }
-    .rules h4 { margin-top: 0; color: var(--gold-2); }
-    .rules li { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-    .kyc-notice {
-      margin: 20px; padding: 12px 15px;
-      background: rgba(255, 61, 77, 0.1); border-left: 4px solid var(--accent);
-      border-radius: 8px; display: flex; align-items: center; gap: 10px;
+    .btn:hover {
+      transform: translateY(-1px);
     }
-    .kyc-notice span { font-size: 13px; font-weight: 600; color: #ff9da5; }
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: white;
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+    }
+    .btn-copy {
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #000;
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+    .rules {
+      margin: 20px 16px;
+      padding: 20px;
+      background: #0f1626;
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    }
+    .rules h4 {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .rules ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    .rules li {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .rules li:last-child {
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body>
 
   <div class="app">
-    <div class="kyc-notice">
-      <div style="font-size: 18px;">⚠️</div>
-      <span>Refer And Earn Ke Liye Aapko KYC Karna Jaruri Hai</span>
-    </div>
     <div class="header">
-      <a href="index.html" class="back-btn">←</a>
-      <h3 style="margin:0;">Refer & Earn</h3>
+      <a href="app.html" class="back-btn">← Arena Hub</a>
+      <h3 style="margin:0; font-size:16px; font-weight:800; color:#fff;">Partner & Referrals</h3>
+    </div>
+
+    <div class="kyc-notice">
+      <div style="font-size: 20px;">🛡️</div>
+      <span>Commission payout aur cash wallet settlement ke liye KYC verification zaroori hai.</span>
     </div>
 
     <div class="hero-card">
-      <div style="font-size: 50px;">🎁</div>
-      <h2>Refer Your Friends</h2>
-      <p>Invite your friends to SR LUDO and get <strong>2% Lifetime Commission</strong> on every game they win!</p>
+      <div style="font-size: 46px;">👑</div>
+      <h2>Invite Contenders</h2>
+      <p>Share your invite code with peers on SKILL LUDO and receive <strong style="color:var(--accent);">2% Lifetime Dividend</strong> on every victory they claim!</p>
     </div>
 
     <div class="stats-grid">
-      <div class="stat-box">Friends Joined<strong id="totalReferrals">0</strong></div>
-      <div class="stat-box">Total Earned<strong id="totalEarnings">₹0</strong></div>
+      <div class="stat-box">Registered Peers<strong id="totalReferrals">0</strong></div>
+      <div class="stat-box">Earned Dividends<strong id="totalEarnings">₹0</strong></div>
     </div>
 
     <div class="share-section">
-      <p style="color:var(--muted); font-size: 12px;">Your Personal Referral Link</p>
-      <div class="refer-link-box" id="referLink">Loading link...</div>
+      <p style="color:var(--muted); font-size: 12px; font-weight: 600; margin-bottom: 8px;">Your Unique Invite URL</p>
+      <div class="refer-link-box" id="referLink">Generating link coordinates...</div>
       
-      <button class="btn btn-whatsapp" id="whatsappBtn">Share on WhatsApp</button>
-      <button class="btn btn-copy" id="copyBtn">Copy Link</button>
+      <button class="btn btn-whatsapp" id="whatsappBtn">Broadcast on WhatsApp</button>
+      <button class="btn btn-copy" id="copyBtn">Copy Invite Coordinates</button>
     </div>
 
     <div class="rules">
-      <h4>How it works?</h4>
-      <ul style="padding-left: 20px;">
-        <li>Share your unique link with friends.</li>
-        <li>When they join via link, they are automatically linked to you.</li>
-        <li>Earn 2% of their winning amount every time they win a battle.</li>
-        <li>Earnings are credited directly to your cash wallet.</li>
+      <h4>Affiliate Program Mechanics</h4>
+      <ul>
+        <li>Deploy your unique link to recruit contenders to the battlefield.</li>
+        <li>When players register via your code, their profile is permanently mapped to your network.</li>
+        <li>Earn a guaranteed 2% dividend from every stake won across their competitive battles.</li>
+        <li>Yields credit automatically to your platform balance and can be transferred smoothly to cash wallet.</li>
       </ul>
     </div>
   </div>
@@ -109,7 +253,8 @@
     import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-   const firebaseConfig = {
+    // NAYA FIREBASE CONFIGURATION (ludo-skill-ml)
+    const firebaseConfig = {
       apiKey: 'AIzaSyAgzbX3dy5PSnlwHvXGKyfGJyk0YtVd8xE',
       authDomain: 'ludo-skill-ml.firebaseapp.com',
       databaseURL: 'https://ludo-skill-ml-default-rtdb.firebaseio.com',
@@ -127,7 +272,7 @@
       if (user) {
         const emailPart = user.email.split('@')[0];
         const finalPhone = (emailPart.length === 10) ? "+91" + emailPart : emailPart;
-        document.body.style.display = "block"; // Show page after auth
+        document.body.style.display = "block";
         startReferralSystem(finalPhone);
       } else {
         window.location.href = 'index.html';
@@ -137,7 +282,6 @@
     function startReferralSystem(phone) {
       const referralCode = phone.replace(/\D/g, '').slice(-6) || '000000';
       
-      // ✅ 404 Fix: Automatic URL generation
       const loc = window.location;
       const path = loc.pathname.substring(0, loc.pathname.lastIndexOf('/'));
       const myReferLink = loc.origin + path + "/index.html?ref=" + referralCode;
@@ -155,12 +299,12 @@
       });
 
       document.getElementById('whatsappBtn').onclick = () => {
-        const msg = "*SR LUDO* 🏆\n\nBhai, is platform par ludo khelo 100% safe hai aur lifetime 2% commission milta hai! ✅\n\nJoin here: " + myReferLink;
+        const msg = "*SKILL LUDO ARENA* 🏆\n\nCompetitive 1v1 skill-based board matches! 100% verified fair play, instant settlement aur lifetime 2% referrer commission! ✅\n\nJoin here: " + myReferLink;
         window.open("https://wa.me/?text=" + encodeURIComponent(msg), '_blank');
       };
 
       document.getElementById('copyBtn').onclick = () => {
-        navigator.clipboard.writeText(myReferLink).then(() => alert('Referral link copy ho gaya!'));
+        navigator.clipboard.writeText(myReferLink).then(() => alert('Invite link copied successfully!'));
       };
     }
   </script>
