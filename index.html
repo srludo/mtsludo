@@ -3,241 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR LUDO - Premium Online Battle Arena</title>
+    <title>SKILL LUDO - India's Premier Tactical Gaming Arena</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #040913;
-            --bg-card: #0d1b33;
-            --accent: #2f7bff;
-            --accent-glow: rgba(47, 123, 255, 0.5);
-            --gold: #ffd05a;
-            --gold-glow: rgba(255, 208, 90, 0.4);
-            --text-main: #e8efff;
-            --text-muted: #9fb0d1;
+            --bg-void: #060911;
+            --bg-surface: #0c1220;
+            --bg-card: rgba(16, 24, 40, 0.75);
+            --gold-core: #f59e0b;
+            --gold-light: #fde68a;
+            --gold-dark: #92400e;
+            --accent-glow: rgba(245, 158, 11, 0.28);
+            --text-pure: #ffffff;
+            --text-sub: #94a3b8;
+            --line-subtle: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(245, 158, 11, 0.25);
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0; padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-void);
+            color: var(--text-pure);
+            min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .viewport-frame {
+            width: 100%;
+            max-width: 500px;
+            min-height: 100vh;
+            background: 
+                radial-gradient(900px 480px at 50% -120px, #261704 0%, transparent 70%),
+                radial-gradient(700px 400px at 50% 100%, #150e02 0%, var(--bg-void) 75%);
+            border-left: 1px solid var(--line-subtle);
+            border-right: 1px solid var(--line-subtle);
+            position: relative;
+            padding: 32px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- Header / Top Bar --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--line-subtle);
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--border-gold);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold-core);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulseDot 1.4s infinite;
+        }
+
+        /* --- Hero Visual Center --- */
+        .hero-showcase {
+            text-align: center;
+            padding: 40px 10px 30px;
+            position: relative;
+        }
+
+        .emblem-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+
+        .main-emblem {
+            height: 125px;
+            filter: drop-shadow(0 0 25px var(--accent-glow));
+            animation: emblemFloat 5s ease-in-out infinite;
+        }
+
+        .tier-crown {
+            position: absolute;
+            top: -12px;
+            right: -20px;
+            background: linear-gradient(135deg, #fbbf24, #b45309);
+            color: #000;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+
+        .arena-title {
+            font-family: 'Cinzel', serif;
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #ffffff 20%, #fde68a 70%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .arena-subtitle {
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.6;
+            max-width: 380px;
+            margin: 0 auto 34px;
+            font-weight: 400;
+        }
+
+        /* --- Primary CTA Button --- */
+        .cta-container {
+            margin: 0 auto 36px;
+            max-width: 380px;
+        }
+
+        .btn-launch {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            color: #000;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.45);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 38px -5px rgba(245, 158, 11, 0.6);
+        }
+
+        .btn-launch::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -100%;
+            width: 80%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(25deg);
+            transition: all 0.75s ease;
+        }
+
+        .btn-launch:hover::after {
+            left: 150%;
+        }
+
+        /* --- Modern Streamlined Pillar Grid --- */
+        .pillars-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .pillar-node {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--line-subtle);
+            border-radius: 18px;
+            padding: 18px 14px;
+            text-align: left;
+            position: relative;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .pillar-node:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-2px);
+        }
+
+        .pillar-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--border-gold);
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .pillar-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+            letter-spacing: 0.2px;
+        }
+
+        .pillar-desc {
+            font-size: 11px;
+            color: var(--text-sub);
+            line-height: 1.45;
+        }
+
+        /* --- Footer & Compliance --- */
+        .footer-hub {
+            border-top: 1px solid var(--line-subtle);
+            padding-top: 22px;
             text-align: center;
         }
 
-        /* Gradient Background with Radial Effect */
-        .main-container {
-            background: radial-gradient(circle at 50% -20%, #1a3c75 0%, var(--bg-dark) 60%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        /* --- Hero Section --- */
-        .hero { padding: 60px 20px 40px; }
-
-        .logo-container {
-            display: inline-block;
-            position: relative;
-            margin-bottom: 25px;
-        }
-        
-        .main-logo {
-            height: 120px;
-            filter: drop-shadow(0 0 15px var(--accent-glow));
-            animation: logoFloat 4s ease-in-out infinite;
-        }
-
-        .premium-tag {
-            position: absolute; top: -10px; right: -30px;
-            background: linear-gradient(135deg, var(--gold), #a86b00);
-            color: #1f1711; font-size: 10px; font-weight: 800;
-            padding: 3px 8px; border-radius: 50px;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 36px; font-weight: 800;
-            background: linear-gradient(180deg, #fff 0%, #a8cfff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0 0 15px;
-            letter-spacing: -1px;
-        }
-
-        .hero-p {
-            font-size: 15px; color: var(--text-muted);
-            max-width: 400px; margin: 0 auto 35px;
-            line-height: 1.6; font-weight: 400;
-        }
-
-        /* --- Premium CTA Button --- */
-        .btn-premium {
-            display: inline-block;
-            padding: 18px 50px;
-            background: linear-gradient(135deg, #2f7bff, #154b99);
-            color: white; font-weight: 700; font-size: 18px;
-            text-decoration: none; border-radius: 50px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 
-                        0 0 30px var(--accent-glow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-        }
-
-        .btn-premium:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 
-                        0 0 40px var(--accent-glow);
-        }
-
-        /* Shine Effect on Button */
-        .btn-premium::after {
-            content: '';
-            position: absolute; top: -50%; left: -100%;
-            width: 100%; height: 200%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(30deg);
-            transition: all 0.6s ease;
-        }
-
-        .btn-premium:hover::after { left: 150%; }
-
-        /* --- Features Section --- */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .legal-nav {
+            display: flex;
+            justify-content: center;
             gap: 20px;
-            max-width: 500px;
-            margin: 40px auto 50px;
-            padding: 0 10px;
+            margin-bottom: 14px;
         }
 
-        .f-card {
-            background: var(--bg-card);
-            padding: 20px 15px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: border-color 0.3s ease;
-            cursor: default;
-        }
-
-        .f-card:hover { border-color: var(--accent); }
-
-        .f-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-        
-        .f-card h3 { 
-            font-size: 14px; color: var(--gold); 
-            margin: 0 0 5px; font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        
-        .f-card p { font-size: 11px; color: var(--text-muted); margin: 0; line-height: 1.4; }
-
-        /* --- Footer Section --- */
-        .footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 30px 20px;
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .footer-links { margin-bottom: 15px; }
-        
-        .footer-links a {
-            color: var(--text-muted);
+        .legal-nav a {
+            color: var(--text-sub);
             text-decoration: none;
             font-size: 12px;
-            margin: 0 10px;
             font-weight: 500;
+            transition: color 0.2s ease;
         }
 
-        .footer-links a:hover { color: white; }
+        .legal-nav a:hover {
+            color: var(--gold-core);
+        }
 
-        .strict-warning {
+        .copyright-tag {
             font-size: 11px;
-            color: #ff3d4d;
-            background: rgba(255, 61, 77, 0.08);
-            border: 1px solid rgba(255, 61, 77, 0.2);
-            padding: 8px 15px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 10px;
-            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 14px;
         }
 
-        /* --- Animations --- */
-        @keyframes logoFloat {
+        .jurisdiction-alert {
+            font-size: 10px;
+            font-weight: 700;
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 9px 14px;
+            border-radius: 10px;
+            line-height: 1.4;
+            letter-spacing: 0.2px;
+        }
+
+        @keyframes emblemFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-7px); }
         }
 
-        /* --- Responsive Mobile First --- */
-        @media (min-width: 540px) {
-            h1 { font-size: 42px; }
-            .main-logo { height: 140px; }
-            .hero-p { font-size: 16px; }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.8); }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <header class="hero">
-            <div class="logo-container">
-                <img src="logo.png" alt="SR Ludo Logo" class="main-logo">
-                <span class="premium-tag">PREMIUM</span>
+    <div class="viewport-frame">
+        <header class="top-nav">
+            <div class="brand-badge">
+                <span class="live-dot"></span>
+                TACTICAL BATTLEFIELD
             </div>
-            
-            <h1>SR LUDO Battle Arena</h1>
-            
-            <p class="hero-p">
-                भारत का सबसे भरोसेमंद और रोमांचक लूडो प्लेटफॉर्म। अपनी स्किल्स दिखाएं, दोस्तों से मुकाबला करें और बनें असली लूडो मास्टर।
-            </p>
-            
-            <a href="app.html" class="btn-premium">
-                LOGIN NOW ➔
-            </a>
+            <div style="font-size: 11px; font-weight: 700; color: var(--gold-light); letter-spacing: 0.5px;">
+                v2.6 PRO
+            </div>
         </header>
 
-        <section class="features">
-            <div class="f-card">
-                <span class="f-icon">🛡️</span>
-                <h3>100% Secure</h3>
-                <p>Advanced anti-cheat and safe data handling.</p>
-            </div>
-            <div class="f-card">
-                <span class="f-icon">⚡</span>
-                <h3>Instant Play</h3>
-                <p>No waiting, start playing in seconds.</p>
-            </div>
-            <div class="f-card">
-                <span class="f-icon">🏆</span>
-                <h3>Premium Gameplay</h3>
-                <p>Smooth graphics and iconic ludo interface.</p>
-            </div>
-            <div class="f-card">
-                <span class="f-icon">📞</span>
-                <h3>24/7 Support</h3>
-                <p>Our team is always here for your help.</p>
-            </div>
-        </section>
+        <main>
+            <section class="hero-showcase">
+                <div class="emblem-wrapper">
+                    <img src="logo.png" alt="Skill Ludo Arena Logo" class="main-emblem">
+                    <span class="tier-crown">VERIFIED</span>
+                </div>
+                
+                <h1 class="arena-title">SKILL LUDO</h1>
+                
+                <p class="arena-subtitle">
+                    रणनीति, सटीकता और दिमागी कौशल का असली युद्धक्षेत्र। वास्तविक खिलाड़ियों के साथ 1v1 मुकाबला करें और अपनी श्रेष्ठता साबित करें।
+                </p>
+                
+                <div class="cta-container">
+                    <a href="app.html" class="btn-launch">
+                        ENTER BATTLE ARENA ➔
+                    </a>
+                </div>
+            </section>
 
-        <footer class="footer">
-            <div class="footer-links">
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms of Service</a>
+            <section class="pillars-matrix">
+                <div class="pillar-node">
+                    <div class="pillar-icon-box">🛡️</div>
+                    <div class="pillar-title">Anti-Cheat Core</div>
+                    <div class="pillar-desc">State-of-the-art bot detection aur secure matchmaking.</div>
+                </div>
+
+                <div class="pillar-node">
+                    <div class="pillar-icon-box">⚡</div>
+                    <div class="pillar-title">Zero Waiting</div>
+                    <div class="pillar-desc">Real-time room syncing aur instant battle connectivity.</div>
+                </div>
+
+                <div class="pillar-node">
+                    <div class="pillar-icon-box">🏆</div>
+                    <div class="pillar-title">Pro Governance</div>
+                    <div class="pillar-desc">100% transparent audit trails aur fair play protocols.</div>
+                </div>
+
+                <div class="pillar-node">
+                    <div class="pillar-icon-box">🎧</div>
+                    <div class="pillar-title">Direct Liaison</div>
+                    <div class="pillar-desc">Dedicated player support aur instant ticket resolution.</div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer-hub">
+            <div class="legal-nav">
+                <a href="privacy.html">Privacy Framework</a>
+                <a href="terms.html">User Agreement</a>
             </div>
             
-            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px;">
-                © 2024 SR Ludo Inc. All Rights Reserved.
+            <p class="copyright-tag">
+                © 2026 SKILL LUDO ENTERTAINMENT. All Platform Rights Reserved.
             </p>
             
-            <div class="strict-warning">
-                STRICTLY 18+ | Not for residents of Assam, Odisha, and Restricted States.
+            <div class="jurisdiction-alert">
+                RESTRICTED 18+ ONLY | Entry strictly barred for residents of Assam, Odisha, Nagaland, Sikkim, Andhra Pradesh, and Telangana.
             </div>
         </footer>
     </div>
