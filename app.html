@@ -362,7 +362,7 @@ document.getElementById('highlightSignupBtn').onclick = () => {
         return;
       }
 
-      const dummyEmail = `${p}@srludo.com`;
+      const dummyEmail = `${p}@skillludo.com`;
       const finalPhone = "+91" + p;
 
       try {
@@ -389,8 +389,8 @@ document.getElementById('highlightSignupBtn').onclick = () => {
         e.preventDefault();
         const p = document.getElementById('loginPhone').value.trim();
         if(p.length !== 10) return alert("Enter your 10 digit number first.");
-        if(confirm(`Send reset link to ${p}@srludo.com?`)) {
-            try { await sendPasswordResetEmail(auth, `${p}@srludo.com`); alert("Reset link sent!"); }
+        if(confirm(`Send reset link to ${p}@skillludo.com?`)) {
+            try { await sendPasswordResetEmail(auth, `${p}@skillludo.com`); alert("Reset link sent!"); }
             catch(e) { alert(e.message); }
         }
     };
