@@ -278,17 +278,21 @@
   const referralCodeInput = document.getElementById('referralCodeInput');
   const copyReferralBtn = document.getElementById('copyReferralBtn');
 
+  // --- PURE FIREBASE AUTH CHECK ---
   onAuthStateChanged(auth, (user) => {
-    if (user) {
+    if (user && user.email) {
+      // Firebase authenticated user se phone number fetch karein
       const userPrefix = user.email.split('@')[0];
       phone = userPrefix.length === 10 ? "+91" + userPrefix : userPrefix;
+      
+      // User node reference set karke profile data load karein
       userRef = ref(db, `users/${phone}`);
       loadProfileData(); 
     } else {
+      // Agar Firebase par user logged in nahi hai
       window.location.href = 'index.html';
     }
   });
-
   async function loadProfileData() {
     const snap = await get(userRef);
     const user = snap.val() || {};
