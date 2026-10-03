@@ -181,7 +181,38 @@
         <button class="btn btn-reject" onclick="sessionStorage.clear(); location.reload();" style="margin-left: 8px;">Lock</button>
       </div>
     </header>
+<!-- REAL-TIME REVENUE & PROFIT MATRIX -->
+    <section class="stats" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 24px;">
+      <div class="stat-card" style="border-left: 4px solid var(--ok);">
+        <p>Total Deposits (Rupaye Aaye)</p>
+        <h2 id="finTotalDeposit" style="color: var(--ok);">₹0</h2>
+        <span id="finDepositCount" style="font-size: 11px; color: var(--muted);">0 Requests</span>
+      </div>
 
+      <div class="stat-card" style="border-left: 4px solid var(--danger);">
+        <p>Total Withdrawals (Rupaye Diye)</p>
+        <h2 id="finTotalWithdraw" style="color: var(--danger);">₹0</h2>
+        <span id="finWithdrawCount" style="font-size: 11px; color: var(--muted);">0 Requests</span>
+      </div>
+
+      <div class="stat-card" style="border-left: 4px solid var(--accent);">
+        <p>Net Platform Cashflow</p>
+        <h2 id="finNetCashflow">₹0</h2>
+        <span style="font-size: 11px; color: var(--muted);">(Deposits - Withdrawals)</span>
+      </div>
+
+      <div class="stat-card" style="border-left: 4px solid #38bdf8;">
+        <p>Total Tables Lagin</p>
+        <h2 id="finTotalTables" style="color: #38bdf8;">0</h2>
+        <span id="finCompletedTables" style="font-size: 11px; color: var(--muted);">0 Completed</span>
+      </div>
+
+      <div class="stat-card" style="border-left: 4px solid #fbbf24; background: rgba(245, 158, 11, 0.05);">
+        <p>Pure Platform Profit (Cut)</p>
+        <h2 id="finTotalProfit" style="color: #fbbf24;">₹0</h2>
+        <span id="finRefDist" style="font-size: 11px; color: var(--muted);">Ref Comm Paid: ₹0</span>
+      </div>
+    </section>
     <!-- METRICS OVERVIEW -->
     <section class="stats">
       <div class="stat-card">
