@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKILL LUDO | Master Administration Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07090e;
+      --surface: #0c1220;
+      --card: #101728;
+      --card-2: #162035;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.35);
+      --border-gold: rgba(245, 158, 11, 0.22);
+      --danger: #ef4444;
+      --ok: #10b981;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(1200px 600px at 50% -100px, #201301 0%, var(--bg) 70%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+    .brand { font-size: 22px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .badge-pro { background: var(--accent); color: #000; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
+
+    /* Stats Grid */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .stat-card p { margin: 0; font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .stat-card h2 { margin: 6px 0 0; font-size: 24px; font-weight: 800; }
+
+    /* Navigation Tabs */
+    .tabs { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 8px; }
+    .tab {
+      background: var(--card);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .tab.active { background: rgba(245, 158, 11, 0.15); border-color: var(--accent); color: var(--accent); }
+
+    /* Content Views */
+    .view { display: none; }
+    .view.active { display: block; }
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow-x: auto;
+      padding: 16px;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { padding: 12px; border-bottom: 1px solid var(--line); color: var(--muted); text-transform: uppercase; font-size: 11px; }
+    td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+
+    /* Buttons & Badges */
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-approve { background: var(--ok); color: #fff; }
+    .btn-reject { background: var(--danger); color: #fff; }
+    .btn-view { background: rgba(255,255,255,0.08); border: 1px solid var(--line); color: #fff; }
+    .status-pill {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .st-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent); }
+    .st-approved { background: rgba(16, 185, 129, 0.15); color: var(--ok); }
+    .st-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+    /* PIN Protection */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: #07090e;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pin-box {
+      background: var(--card);
+      border: 1px solid var(--border-gold);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      width: 340px;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 12px;
+      background: #080c14;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      letter-spacing: 6px;
+      margin: 16px 0;
+      outline: none;
+    }
+
+    /* Modal / Lightbox */
+    .preview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .preview-modal img { max-width: 90%; max-height: 85vh; border-radius: 12px; border: 1px solid var(--border-gold); }
+  </style>
+</head>
+<body>
+
+  <!-- SECURITY PIN SCREEN -->
+  <div id="authScreen" class="auth-overlay">
+    <div class="pin-box">
+      <h3 style="margin: 0 0 8px; color: #fff;">Admin Console Security</h3>
+      <p style="margin: 0; font-size: 12px; color: var(--muted);">Enter 4-digit Master Security Key</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" />
+      <button class="btn btn-approve" id="unlockBtn" style="width: 100%; padding: 12px; font-size: 14px;">Authorize Access</button>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <!-- TOP HEADER -->
+    <header class="header">
+      <div class="brand">
+        SKILL LUDO <span class="badge-pro">CONTROL DESK</span>
+      </div>
+      <div>
+        <button class="btn btn-view" onclick="location.reload()">Refresh Data</button>
+        <button class="btn btn-reject" onclick="sessionStorage.clear(); location.reload();" style="margin-left: 8px;">Lock</button>
+      </div>
+    </header>
+
+    <!-- METRICS OVERVIEW -->
+    <section class="stats">
+      <div class="stat-card">
+        <p>Pending Deposits</p>
+        <h2 id="cntDeposit" style="color: var(--accent);">0</h2>
+      </div>
+      <div class="stat-card">
+        <p>Pending Withdrawals</p>
+        <h2 id="cntWithdraw" style="color: var(--danger);">0</h2>
+      </div>
+      <div class="stat-card">
+        <p>Disputed / Running Matches</p>
+        <h2 id="cntBattles" style="color: #38bdf8;">0</h2>
+      </div>
+      <div class="stat-card">
+        <p>Pending KYC Reviews</p>
+        <h2 id="cntKyc" style="color: var(--ok);">0</h2>
+      </div>
+    </section>
+
+    <!-- NAVIGATION SWITCHER -->
+    <nav class="tabs">
+      <button class="tab active" data-target="tabDeposits">Deposits (Add Cash)</button>
+      <button class="tab" data-target="tabWithdraws">Withdrawals (Payouts)</button>
+      <button class="tab" data-target="tabBattles">Match Disputes & Settlement</button>
+      <button class="tab" data-target="tabKyc">KYC Document Audits</button>
+      <button class="tab" data-target="tabUsers">User Account Manager</button>
+    </nav>
+
+    <!-- 1. DEPOSIT REQUESTS VIEW -->
+    <section id="tabDeposits" class="view active">
+      <div class="table-card">
+        <h3>Pending Deposit Tickets</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th>Player Mobile</th>
+              <th>Amount</th>
+              <th>UTR / Transaction ID</th>
+              <th>Screenshot Proof</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="depositTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. WITHDRAW REQUESTS VIEW -->
+    <section id="tabWithdraws" class="view">
+      <div class="table-card">
+        <h3>Pending Withdrawal Tickets</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th>Player Mobile</th>
+              <th>Amount</th>
+              <th>Payout Channel & Coordinates</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="withdrawTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. BATTLES & DISPUTES VIEW -->
+    <section id="tabBattles" class="view">
+      <div class="table-card">
+        <h3>Match Settlement & Dispute Desk</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Table ID</th>
+              <th>Stake Amount</th>
+              <th>Prize Pool</th>
+              <th>Host (Creator)</th>
+              <th>Challenger (Joiner)</th>
+              <th>Claimant / Proof</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="battlesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. KYC AUDIT VIEW -->
+    <section id="tabKyc" class="view">
+      <div class="table-card">
+        <h3>Player KYC Audits</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>User Mobile</th>
+              <th>Full Name</th>
+              <th>Identity Number</th>
+              <th>Document Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="kycTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. USER MANAGER VIEW -->
+    <section id="tabUsers" class="view">
+      <div class="table-card" style="max-width: 600px; margin: 0 auto;">
+        <h3>Direct Wallet Modification</h3>
+        <p style="font-size: 12px; color: var(--muted); margin: 0 0 16px;">Search player by mobile to manually modify balance credits.</p>
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <input type="text" id="searchUserPhone" placeholder="Enter Mobile (e.g. +919876543210)" style="flex: 1; padding: 12px; background:#080c14; border:1px solid var(--line); border-radius:10px; color:#fff;" />
+          <button class="btn btn-approve" id="searchUserBtn">Fetch User</button>
+        </div>
+        <div id="userInfoBox" style="display: none; background: #080c14; padding: 16px; border-radius: 12px; border: 1px solid var(--border-gold);">
+          <p><strong>Mobile:</strong> <span id="uPhone"></span></p>
+          <p><strong>Deposit Balance:</strong> <span id="uDeposit"></span></p>
+          <p><strong>Winning Balance:</strong> <span id="uWin"></span></p>
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <input type="number" id="modAmount" placeholder="Amount (₹)" style="flex: 1; padding: 10px; background:#101728; border:1px solid var(--line); border-radius:8px; color:#fff;" />
+            <button class="btn btn-approve" id="addDepositBtn">+ Deposit</button>
+            <button class="btn btn-view" id="addWinBtn">+ Winnings</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- IMAGE LIGHTBOX MODAL -->
+  <div id="imageModal" class="preview-modal" onclick="this.style.display='none'">
+    <img id="previewImg" src="" />
+  </div>
+
+  <!-- SCRIPT & FIREBASE -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, onValue, get, set, update, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    // NAYA FIREBASE CONFIG (ludo-skill-ml)
+    const firebaseConfig = {
+      apiKey: 'AIzaSyAgzbX3dy5PSnlwHvXGKyfGJyk0YtVd8xE',
+      authDomain: 'ludo-skill-ml.firebaseapp.com',
+      databaseURL: 'https://ludo-skill-ml-default-rtdb.firebaseio.com',
+      projectId: 'ludo-skill-ml',
+      storageBucket: 'ludo-skill-ml.firebasestorage.app',
+      messagingSenderId: '687435118193',
+      appId: '1:687435118193:web:729dfaaa3fc36393508dd0'
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // MASTER SECURITY PIN (Default: 1234)
+    const MASTER_PIN = "1234";
+
+    const authScreen = document.getElementById('authScreen');
+    const pinInput = document.getElementById('pinInput');
+    const unlockBtn = document.getElementById('unlockBtn');
+
+    if (sessionStorage.getItem('skill_admin_auth') === 'true') {
+      authScreen.style.display = 'none';
+      initAdminPanel();
+    }
+
+    unlockBtn.onclick = () => {
+      if (pinInput.value === MASTER_PIN) {
+        sessionStorage.setItem('skill_admin_auth', 'true');
+        authScreen.style.display = 'none';
+        initAdminPanel();
+      } else {
+        alert("Incorrect Admin Key!");
+        pinInput.value = "";
+      }
+    };
+
+    function initAdminPanel() {
+      listenDeposits();
+      listenWithdrawals();
+      listenBattles();
+      listenKyc();
+      setupUserManager();
+    }
+
+    // --- TAB SWITCHER ---
+    document.querySelectorAll('.tab').forEach(t => {
+      t.onclick = () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.target).classList.add('active');
+      };
+    });
+
+    window.previewPhoto = (url) => {
+      if(!url) return;
+      document.getElementById('previewImg').src = url;
+      document.getElementById('imageModal').style.display = 'flex';
+    };
+
+    // 1. DEPOSIT HANDLERS
+    function listenDeposits() {
+      onValue(ref(db, 'deposit_requests'), (snap) => {
+        const data = snap.val() || {};
+        const tbody = document.getElementById('depositTableBody');
+        const list = Object.values(data).filter(d => d.status === 'pending').sort((a,b) => (b.time || 0) - (a.time || 0));
+        document.getElementById('cntDeposit').textContent = list.length;
+
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--muted);">No pending deposit tickets.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = list.map(d => `
+          <tr>
+            <td>${new Date(d.time).toLocaleString('en-IN')}</td>
+            <td><strong>${d.phone}</strong></td>
+            <td>₹${d.amount}</td>
+            <td><code>${d.utr || 'N/A'}</code></td>
+            <td><button class="btn btn-view" onclick="previewPhoto('${d.screenshot}')">View Receipt</button></td>
+            <td>
+              <button class="btn btn-approve" onclick="approveDeposit('${d.id}', '${d.phone}', ${d.amount})">Approve</button>
+              <button class="btn btn-reject" onclick="rejectDeposit('${d.id}')">Reject</button>
+            </td>
+          </tr>
+        `).join('');
+      });
+    }
+
+    window.approveDeposit = async (id, phone, amount) => {
+      if(!confirm(`Credit ₹${amount} to ${phone}?`)) return;
+      try {
+        await runTransaction(ref(db, `users/${phone}`), (user) => {
+          if(!user) return user;
+          user.balance = (user.balance || 0) + Number(amount);
+          return user;
+        });
+        await update(ref(db, `deposit_requests/${id}`), { status: 'approved', resolvedAt: Date.now() });
+        alert('Deposit Approved & Balance Credited!');
+      } catch(e) { alert('Error: ' + e.message); }
+    };
+
+    window.rejectDeposit = async (id) => {
+      if(!confirm('Reject this deposit request?')) return;
+      await update(ref(db, `deposit_requests/${id}`), { status: 'rejected', resolvedAt: Date.now() });
+      alert('Deposit ticket rejected.');
+    };
+
+    // 2. WITHDRAWAL HANDLERS
+    function listenWithdrawals() {
+      onValue(ref(db, 'withdraw_requests'), (snap) => {
+        const data = snap.val() || {};
+        const tbody = document.getElementById('withdrawTableBody');
+        const list = Object.values(data).filter(w => w.status === 'pending').sort((a,b) => (b.time || 0) - (a.time || 0));
+        document.getElementById('cntWithdraw').textContent = list.length;
+
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">No pending withdrawal requests.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = list.map(w => `
+          <tr>
+            <td>${new Date(w.time).toLocaleString('en-IN')}</td>
+            <td><strong>${w.phone}</strong></td>
+            <td>₹${w.amount}</td>
+            <td><span class="badge-pro">${w.method}</span></td>
+            <td>
+              <button class="btn btn-approve" onclick="approveWithdrawal('${w.id}')">Mark Paid</button>
+              <button class="btn btn-reject" onclick="rejectWithdrawal('${w.id}', '${w.phone}', ${w.amount})">Refund & Reject</button>
+            </td>
+          </tr>
+        `).join('');
+      });
+    }
+
+    window.approveWithdrawal = async (id) => {
+      if(!confirm('Confirm that payout has been transferred to player?')) return;
+      await update(ref(db, `withdraw_requests/${id}`), { status: 'approved', resolvedAt: Date.now() });
+      alert('Withdrawal ticket marked approved!');
+    };
+
+    window.rejectWithdrawal = async (id, phone, amount) => {
+      if(!confirm(`Reject withdrawal and refund ₹${amount} back to winning wallet?`)) return;
+      try {
+        await runTransaction(ref(db, `users/${phone}`), (user) => {
+          if(!user) return user;
+          user.win_balance = (user.win_balance || 0) + Number(amount);
+          return user;
+        });
+        await update(ref(db, `withdraw_requests/${id}`), { status: 'rejected', resolvedAt: Date.now() });
+        alert('Withdrawal rejected and amount refunded!');
+      } catch(e) { alert('Error: ' + e.message); }
+    };
+
+    // 3. BATTLES & DISPUTES
+    function listenBattles() {
+      onValue(ref(db, 'battles'), (snap) => {
+        const data = snap.val() || {};
+        const tbody = document.getElementById('battlesTableBody');
+        const list = Object.values(data).filter(b => ['pending', 'dispute', 'playing'].includes(b.status));
+        document.getElementById('cntBattles').textContent = list.length;
+
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--muted);">No disputed or running matches.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = list.map(b => `
+          <tr>
+            <td><code>#${b.id.slice(-6)}</code></td>
+            <td>₹${b.amount}</td>
+            <td style="color:var(--ok); font-weight:800;">₹${b.winAmount}</td>
+            <td>${b.creatorPhone}</td>
+            <td>${b.joinerPhone || 'Waiting...'}</td>
+            <td>
+              ${b.screenshot_url 
+                ? `<button class="btn btn-view" onclick="previewPhoto('${b.screenshot_url}')">Proof (${b.win_claim_by?.slice(-4) || ''})</button>` 
+                : 'No Proof'}
+            </td>
+            <td>
+              <button class="btn btn-approve" onclick="resolveWinner('${b.id}', '${b.creatorPhone}', ${b.winAmount})">Win Host</button>
+              <button class="btn btn-approve" style="background:#0284c7;" onclick="resolveWinner('${b.id}', '${b.joinerPhone}', ${b.winAmount})">Win Joiner</button>
+              <button class="btn btn-reject" onclick="cancelBattleRefund('${b.id}')">Cancel (Refund)</button>
+            </td>
+          </tr>
+        `).join('');
+      });
+    }
+
+    window.resolveWinner = async (battleId, winnerPhone, winAmount) => {
+      if(!winnerPhone) return alert('Player not registered on table!');
+      if(!confirm(`Declare ${winnerPhone} winner for ₹${winAmount}?`)) return;
+
+      try {
+        await runTransaction(ref(db, `users/${winnerPhone}`), (user) => {
+          if(!user) return user;
+          user.win_balance = (user.win_balance || 0) + Number(winAmount);
+          return user;
+        });
+
+        // Referrer dividend (2%)
+        const userSnap = await get(ref(db, `users/${winnerPhone}`));
+        const refPhone = userSnap.val()?.referredBy;
+        if(refPhone) {
+          const comm = Math.round(winAmount * 0.01053);
+          if(comm > 0) {
+            await runTransaction(ref(db, `users/${refPhone}`), (u) => {
+              if(!u) return u;
+              u.referral_balance = (u.referral_balance || 0) + comm;
+              u.referral_earnings_total = (u.referral_earnings_total || 0) + comm;
+              return u;
+            });
+          }
+        }
+
+        await update(ref(db, `battles/${battleId}`), {
+          status: 'completed',
+          winnerPhone: winnerPhone,
+          settledAt: Date.now()
+        });
+
+        alert('Match settled and winner credited successfully!');
+      } catch(e) { alert('Error: ' + e.message); }
+    };
+
+    window.cancelBattleRefund = async (battleId) => {
+      if(!confirm('Cancel table and refund both players?')) return;
+      const bSnap = await get(ref(db, `battles/${battleId}`));
+      const b = bSnap.val();
+      if(!b) return;
+
+      if(b.creatorPhone && b.creatorDeduct) {
+        await runTransaction(ref(db, `users/${b.creatorPhone}`), (u) => {
+          if(!u) return u;
+          u.win_balance = (u.win_balance || 0) + (b.creatorDeduct.fromWin || 0);
+          u.balance = (u.balance || 0) + (b.creatorDeduct.fromCash || 0);
+          return u;
+        });
+      }
+      if(b.joinerPhone && b.joinerDeduct) {
+        await runTransaction(ref(db, `users/${b.joinerPhone}`), (u) => {
+          if(!u) return u;
+          u.win_balance = (u.win_balance || 0) + (b.joinerDeduct.fromWin || 0);
+          u.balance = (u.balance || 0) + (b.joinerDeduct.fromCash || 0);
+          return u;
+        });
+      }
+
+      await update(ref(db, `battles/${battleId}`), { status: 'cancelled_admin', updatedAt: Date.now() });
+      alert('Battle cancelled & refunds credited!');
+    };
+
+    // 4. KYC AUDIT
+    function listenKyc() {
+      onValue(ref(db, 'users'), (snap) => {
+        const data = snap.val() || {};
+        const tbody = document.getElementById('kycTableBody');
+        const list = Object.entries(data).filter(([p, u]) => u.kyc_status === 'pending' && u.aadhar_url);
+        document.getElementById('cntKyc').textContent = list.length;
+
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">No pending identity documents.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = list.map(([p, u]) => `
+          <tr>
+            <td><strong>${p}</strong></td>
+            <td>${u.full_name || 'N/A'}</td>
+            <td><code>${u.aadhar_no || 'N/A'}</code></td>
+            <td><button class="btn btn-view" onclick="previewPhoto('${u.aadhar_url}')">Inspect Document</button></td>
+            <td>
+              <button class="btn btn-approve" onclick="verifyKyc('${p}')">Verify</button>
+              <button class="btn btn-reject" onclick="rejectKyc('${p}')">Reject</button>
+            </td>
+          </tr>
+        `).join('');
+      });
+    }
+
+    window.verifyKyc = async (phone) => {
+      await update(ref(db, `users/${phone}`), { kyc_status: 'verified' });
+      alert(`KYC verified for ${phone}!`);
+    };
+
+    window.rejectKyc = async (phone) => {
+      await update(ref(db, `users/${phone}`), { kyc_status: 'rejected' });
+      alert(`KYC rejected for ${phone}!`);
+    };
+
+    // 5. USER MANAGER
+    function setupUserManager() {
+      let activePhone = "";
+      document.getElementById('searchUserBtn').onclick = async () => {
+        let p = document.getElementById('searchUserPhone').value.trim();
+        if(!p.startsWith('+')) p = '+91' + p.replace(/\D/g, '').slice(-10);
+        activePhone = p;
+
+        const snap = await get(ref(db, `users/${p}`));
+        if(!snap.exists()) return alert('User not found in system!');
+
+        const u = snap.val();
+        document.getElementById('uPhone').textContent = p;
+        document.getElementById('uDeposit').textContent = '₹' + (u.balance || 0);
+        document.getElementById('uWin').textContent = '₹' + (u.win_balance || 0);
+        document.getElementById('userInfoBox').style.display = 'block';
+      };
+
+      document.getElementById('addDepositBtn').onclick = async () => {
+        const val = Number(document.getElementById('modAmount').value);
+        if(!val) return alert('Enter valid amount');
+        await runTransaction(ref(db, `users/${activePhone}`), (u) => {
+          if(!u) return u;
+          u.balance = (u.balance || 0) + val;
+          return u;
+        });
+        alert('Deposit balance modified!');
+        document.getElementById('searchUserBtn').click();
+      };
+
+      document.getElementById('addWinBtn').onclick = async () => {
+        const val = Number(document.getElementById('modAmount').value);
+        if(!val) return alert('Enter valid amount');
+        await runTransaction(ref(db, `users/${activePhone}`), (u) => {
+          if(!u) return u;
+          u.win_balance = (u.win_balance || 0) + val;
+          return u;
+        });
+        alert('Winning balance modified!');
+        document.getElementById('searchUserBtn').click();
+      };
+    }
+  </script>
+</body>
+</html>
