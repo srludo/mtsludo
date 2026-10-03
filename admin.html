@@ -45,7 +45,7 @@
     .badge-pro { background: var(--accent); color: #000; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 800; }
 
     /* Stats Grid */
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
     .stat-card {
       background: var(--card);
       border: 1px solid var(--border-gold);
@@ -181,8 +181,9 @@
         <button class="btn btn-reject" onclick="sessionStorage.clear(); location.reload();" style="margin-left: 8px;">Lock</button>
       </div>
     </header>
-<!-- REAL-TIME REVENUE & PROFIT MATRIX -->
-    <section class="stats" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 24px;">
+
+    <!-- REAL-TIME REVENUE & PROFIT MATRIX -->
+    <section class="stats" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
       <div class="stat-card" style="border-left: 4px solid var(--ok);">
         <p>Total Deposits (Rupaye Aaye)</p>
         <h2 id="finTotalDeposit" style="color: var(--ok);">₹0</h2>
@@ -213,7 +214,8 @@
         <span id="finRefDist" style="font-size: 11px; color: var(--muted);">Ref Comm Paid: ₹0</span>
       </div>
     </section>
-    <!-- METRICS OVERVIEW -->
+
+    <!-- METRICS OVERVIEW (PENDING COUNTERS) -->
     <section class="stats">
       <div class="stat-card">
         <p>Pending Deposits</p>
@@ -323,21 +325,25 @@
 
     <!-- 5. USER MANAGER VIEW -->
     <section id="tabUsers" class="view">
-      <div class="table-card" style="max-width: 600px; margin: 0 auto;">
-        <h3>Direct Wallet Modification</h3>
-        <p style="font-size: 12px; color: var(--muted); margin: 0 0 16px;">Search player by mobile to manually modify balance credits.</p>
+      <div class="table-card" style="max-width: 680px; margin: 0 auto;">
+        <h3>Direct Wallet Modification (+ Add / - Cut)</h3>
+        <p style="font-size: 12px; color: var(--muted); margin: 0 0 16px;">Search player by mobile to manually add or deduct wallet credits.</p>
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
           <input type="text" id="searchUserPhone" placeholder="Enter Mobile (e.g. +919876543210)" style="flex: 1; padding: 12px; background:#080c14; border:1px solid var(--line); border-radius:10px; color:#fff;" />
           <button class="btn btn-approve" id="searchUserBtn">Fetch User</button>
         </div>
-        <div id="userInfoBox" style="display: none; background: #080c14; padding: 16px; border-radius: 12px; border: 1px solid var(--border-gold);">
+        <div id="userInfoBox" style="display: none; background: #080c14; padding: 18px; border-radius: 14px; border: 1px solid var(--border-gold);">
           <p><strong>Mobile:</strong> <span id="uPhone"></span></p>
-          <p><strong>Deposit Balance:</strong> <span id="uDeposit"></span></p>
-          <p><strong>Winning Balance:</strong> <span id="uWin"></span></p>
-          <div style="display: flex; gap: 8px; margin-top: 14px;">
-            <input type="number" id="modAmount" placeholder="Amount (₹)" style="flex: 1; padding: 10px; background:#101728; border:1px solid var(--line); border-radius:8px; color:#fff;" />
-            <button class="btn btn-approve" id="addDepositBtn">+ Deposit</button>
-            <button class="btn btn-view" id="addWinBtn">+ Winnings</button>
+          <p><strong>Deposit Balance:</strong> <span id="uDeposit" style="color:var(--ok); font-weight:800;"></span></p>
+          <p><strong>Winning Balance:</strong> <span id="uWin" style="color:var(--accent); font-weight:800;"></span></p>
+          
+          <input type="number" id="modAmount" placeholder="Enter Amount (₹)" style="width: 100%; padding: 12px; background:#101728; border:1px solid var(--line); border-radius:10px; color:#fff; margin-top: 10px;" />
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;">
+            <button class="btn btn-approve" id="addDepositBtn">+ Add Deposit</button>
+            <button class="btn btn-reject" id="cutDepositBtn">- Cut Deposit</button>
+            <button class="btn btn-approve" style="background: #0284c7;" id="addWinBtn">+ Add Winnings</button>
+            <button class="btn btn-reject" style="background: #b91c1c;" id="cutWinBtn">- Cut Winnings</button>
           </div>
         </div>
       </div>
@@ -392,6 +398,7 @@
     };
 
     function initAdminPanel() {
+      setupFinancialAnalytics(); // PnL & Financial Tracker
       listenDeposits();
       listenWithdrawals();
       listenBattles();
@@ -414,6 +421,88 @@
       document.getElementById('previewImg').src = url;
       document.getElementById('imageModal').style.display = 'flex';
     };
+
+    // --- FINANCIAL ANALYTICS & REVENUE ENGINE ---
+    function setupFinancialAnalytics() {
+      const fmtRupee = (val = 0) => '₹' + Number(val || 0).toLocaleString('en-IN');
+
+      // 1. Deposits Calculate
+      onValue(ref(db, 'deposit_requests'), (snap) => {
+        const records = snap.val() || {};
+        let totalAmt = 0;
+        let count = 0;
+        Object.values(records).forEach(item => {
+          if (item && item.status === 'approved') {
+            totalAmt += Number(item.amount || 0);
+            count++;
+          }
+        });
+        document.getElementById('finTotalDeposit').textContent = fmtRupee(totalAmt);
+        document.getElementById('finDepositCount').textContent = `${count} Approved`;
+        window._depositTotal = totalAmt;
+        updateNetCashflow();
+      });
+
+      // 2. Withdrawals Calculate
+      onValue(ref(db, 'withdraw_requests'), (snap) => {
+        const records = snap.val() || {};
+        let totalAmt = 0;
+        let count = 0;
+        Object.values(records).forEach(item => {
+          if (item && item.status === 'approved') {
+            totalAmt += Number(item.amount || 0);
+            count++;
+          }
+        });
+        document.getElementById('finTotalWithdraw').textContent = fmtRupee(totalAmt);
+        document.getElementById('finWithdrawCount').textContent = `${count} Settled`;
+        window._withdrawTotal = totalAmt;
+        updateNetCashflow();
+      });
+
+      // 3. Tables Count & Margin Profit
+      onValue(ref(db, 'battles'), (snap) => {
+        const tables = snap.val() || {};
+        let totalCount = Object.keys(tables).length;
+        let completedCount = 0;
+        let grossPlatformCut = 0;
+
+        Object.values(tables).forEach(b => {
+          if (b && b.status === 'completed') {
+            completedCount++;
+            const totalPool = Number(b.amount || 0) * 2;
+            const payoutGiven = Number(b.winAmount || 0);
+            const tableMargin = Math.max(0, totalPool - payoutGiven);
+            grossPlatformCut += tableMargin;
+          }
+        });
+
+        document.getElementById('finTotalTables').textContent = totalCount;
+        document.getElementById('finCompletedTables').textContent = `${completedCount} Completed Matches`;
+        document.getElementById('finTotalProfit').textContent = fmtRupee(grossPlatformCut);
+      });
+
+      // 4. Referral Commission Distributed
+      onValue(ref(db, 'referral_payouts'), (snap) => {
+        const payouts = snap.val() || {};
+        let totalComm = 0;
+        Object.values(payouts).forEach(userPayouts => {
+          if (userPayouts && typeof userPayouts === 'object') {
+            Object.values(userPayouts).forEach(p => {
+              totalComm += Number(p.commissionAmount || 0);
+            });
+          }
+        });
+        document.getElementById('finRefDist').textContent = `Ref Comm Paid: ${fmtRupee(totalComm)}`;
+      });
+
+      function updateNetCashflow() {
+        const net = (window._depositTotal || 0) - (window._withdrawTotal || 0);
+        const elem = document.getElementById('finNetCashflow');
+        elem.textContent = fmtRupee(net);
+        elem.style.color = net >= 0 ? 'var(--ok)' : 'var(--danger)';
+      }
+    }
 
     // 1. DEPOSIT HANDLERS
     function listenDeposits() {
@@ -556,7 +645,7 @@
           return user;
         });
 
-        // Referrer dividend (2%)
+        // 2% Referrer Dividend
         const userSnap = await get(ref(db, `users/${winnerPhone}`));
         const refPhone = userSnap.val()?.referredBy;
         if(refPhone) {
@@ -646,7 +735,7 @@
       alert(`KYC rejected for ${phone}!`);
     };
 
-    // 5. USER MANAGER
+    // 5. USER MANAGER (ADD & CUT BALANCE)
     function setupUserManager() {
       let activePhone = "";
       document.getElementById('searchUserBtn').onclick = async () => {
@@ -664,27 +753,69 @@
         document.getElementById('userInfoBox').style.display = 'block';
       };
 
+      // + ADD DEPOSIT
       document.getElementById('addDepositBtn').onclick = async () => {
         const val = Number(document.getElementById('modAmount').value);
-        if(!val) return alert('Enter valid amount');
+        if(!val || val <= 0) return alert('Enter valid positive amount');
         await runTransaction(ref(db, `users/${activePhone}`), (u) => {
           if(!u) return u;
           u.balance = (u.balance || 0) + val;
           return u;
         });
-        alert('Deposit balance modified!');
+        alert(`₹${val} successfully added to Deposit!`);
         document.getElementById('searchUserBtn').click();
       };
 
+      // - CUT DEPOSIT
+      document.getElementById('cutDepositBtn').onclick = async () => {
+        const val = Number(document.getElementById('modAmount').value);
+        if(!val || val <= 0) return alert('Enter valid positive amount to cut');
+        let errorMsg = null;
+        await runTransaction(ref(db, `users/${activePhone}`), (u) => {
+          if(!u) return u;
+          const curr = Number(u.balance || 0);
+          if(curr < val) {
+            errorMsg = "User deposit balance is less than cut amount!";
+            return;
+          }
+          u.balance = Math.max(0, curr - val);
+          return u;
+        });
+        if(errorMsg) return alert(errorMsg);
+        alert(`₹${val} deducted from Deposit!`);
+        document.getElementById('searchUserBtn').click();
+      };
+
+      // + ADD WINNINGS
       document.getElementById('addWinBtn').onclick = async () => {
         const val = Number(document.getElementById('modAmount').value);
-        if(!val) return alert('Enter valid amount');
+        if(!val || val <= 0) return alert('Enter valid positive amount');
         await runTransaction(ref(db, `users/${activePhone}`), (u) => {
           if(!u) return u;
           u.win_balance = (u.win_balance || 0) + val;
           return u;
         });
-        alert('Winning balance modified!');
+        alert(`₹${val} successfully added to Winnings!`);
+        document.getElementById('searchUserBtn').click();
+      };
+
+      // - CUT WINNINGS
+      document.getElementById('cutWinBtn').onclick = async () => {
+        const val = Number(document.getElementById('modAmount').value);
+        if(!val || val <= 0) return alert('Enter valid positive amount to cut');
+        let errorMsg = null;
+        await runTransaction(ref(db, `users/${activePhone}`), (u) => {
+          if(!u) return u;
+          const curr = Number(u.win_balance || 0);
+          if(curr < val) {
+            errorMsg = "User winning balance is less than cut amount!";
+            return;
+          }
+          u.win_balance = Math.max(0, curr - val);
+          return u;
+        });
+        if(errorMsg) return alert(errorMsg);
+        alert(`₹${val} deducted from Winnings!`);
         document.getElementById('searchUserBtn').click();
       };
     }
